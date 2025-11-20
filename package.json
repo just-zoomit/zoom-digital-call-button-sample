@@ -1,0 +1,23 @@
+{
+  "name": "zoom-digital-call-button-demo",
+  "version": "1.0.0",
+  "description": "Digital Call Button demo using Zoom Team Chatbot, Node + Express",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "helmet": "^7.0.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2",
+    "rate-limiter-flexible": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

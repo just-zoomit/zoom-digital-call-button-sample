@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Need Help?</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Need help with <%= item.name %>?</h1>
+      <p class="subtitle">
+        Store: <strong><%= store.name %></strong><br />
+        Location: <strong><%= item.aisle %></strong>
+      </p>
+
+      <form method="POST" action="/call-request" class="card">
+        <input type="hidden" name="storeId" value="<%= store.id %>" />
+        <input type="hidden" name="itemId" value="<%= item.id %>" />
+
+        <fieldset>
+          <legend>What do you need help with?</legend>
+
+          <% if (prompts && prompts.length) { %>
+            <% prompts.forEach(function(prompt) { %>
+              <label class="radio-option">
+                <input type="radio" name="promptId" value="<%= prompt.id %>" />
+                <span><%= prompt.label %></span>
+              </label>
+            <% }) %>
+          <% } else { %>
+            <p>No presets found. Please describe your request.</p>
+          <% } %>
+        </fieldset>
+
+        <div class="field">
+          <label for="customQuestion">Or describe what you need:</label>
+          <textarea id="customQuestion" name="customQuestion" rows="3" placeholder="I need help with..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Request Help</button>
+      </form>
+    </main>
+  </body>
+</html>

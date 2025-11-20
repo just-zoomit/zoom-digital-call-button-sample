@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/services/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

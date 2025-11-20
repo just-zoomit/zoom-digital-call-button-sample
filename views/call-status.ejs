@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Help Request Status</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <!-- Simple brand/header row -->
+      <header class="status-header">
+        <div class="status-logo">STORE</div>
+      </header>
+
+      <section class="status-card">
+        <!-- Request title (you can later inject the real text) -->
+        <h2 class="status-request-title">I need general help in this area</h2>
+
+        <!-- Vertical stepper -->
+        <div class="status-stepper" id="statusStepper">
+          <!-- Step 1: Reviewing -->
+          <div class="status-step step-reviewing is-active">
+            <div class="status-step-marker-wrap">
+              <div class="status-step-marker"></div>
+              <div class="status-step-line"></div>
+            </div>
+            <div class="status-step-content">
+              <div class="status-step-title">Reviewing</div>
+              <div class="status-step-desc">
+                Thank you. Someone will be with you shortly.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Received -->
+          <div class="status-step step-received">
+            <div class="status-step-marker-wrap">
+              <div class="status-step-marker"></div>
+              <div class="status-step-line"></div>
+            </div>
+            <div class="status-step-content">
+              <div class="status-step-title">Received</div>
+              <div class="status-step-desc">
+                Your request has been received by the store team.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: On the way -->
+          <div class="status-step step-onway">
+            <div class="status-step-marker-wrap">
+              <div class="status-step-marker"></div>
+              <!-- last step has no line, but we'll hide it via CSS -->
+              <div class="status-step-line status-step-line-last"></div>
+            </div>
+            <div class="status-step-content">
+              <div class="status-step-title">On the way</div>
+              <div class="status-step-desc">
+                An associate is on the way to help you in this area.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="status-cancel-button">CANCEL</button>
+      </section>
+    </main>
+
+    <script>
+      const requestId = "<%= requestId %>";
+
+      function setStepper(status, claimedByName) {
+        const reviewing = document.querySelector(".step-reviewing");
+        const received  = document.querySelector(".step-received");
+        const onway     = document.querySelector(".step-onway");
+
+        [reviewing, received, onway].forEach(step => {
+          step.classList.remove("is-active", "is-complete");
+        });
+
+        // Default state: just submitted
+        // NEW  -> Reviewing active
+        // CLAIMED -> Reviewing + Received complete, On the way active
+        // RESOLVED -> all complete
+        if (status === "NEW") {
+          reviewing.classList.add("is-active");
+        } else if (status === "CLAIMED") {
+          reviewing.classList.add("is-complete");
+          received.classList.add("is-complete");
+          onway.classList.add("is-active");
+
+          // optionally personalize the "On the way" copy
+          if (claimedByName) {
+            const desc = onway.querySelector(".status-step-desc");
+            desc.textContent = `${claimedByName} is on the way to help you.`;
+          }
+        } else if (status === "RESOLVED") {
+          reviewing.classList.add("is-complete");
+          received.classList.add("is-complete");
+          onway.classList.add("is-complete");
+        } else {
+          // fallback
+          reviewing.classList.add("is-active");
+        }
+      }
+
+      async function pollStatus() {
+        try {
+          const res = await fetch(`/api/status/${requestId}`);
+          if (!res.ok) return;
+          const data = await res.json();
+
+          setStepper(data.status, data.claimedByDisplayName || null);
+        } catch (err) {
+          console.error("Error polling status", err);
+        }
+      }
+
+      pollStatus();
+      setInterval(pollStatus, 3000);
+    </script>
+  </body>
+</html>
