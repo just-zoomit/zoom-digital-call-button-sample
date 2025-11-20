@@ -3,12 +3,16 @@ import morgan from "morgan";
 import helmet from "helmet";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
 
 import { env } from "./config/env.js";
 import callRouter from "./routes/call.js";
 import zoomRouter from "./routes/zoom.js";
 import { rateLimit } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { handleWebSocketConnection } from "./middleware/websocketHandler.js";
+import { websocketService } from "./services/websocketService.js";
 
 const app = express();
 
@@ -35,14 +39,34 @@ app.use("/call-request", rateLimit);
 app.use("/", callRouter);
 app.use("/zoom", zoomRouter);
 
+// WebSocket stats endpoint
+app.get("/ws-stats", (_, res) => {
+  res.json(websocketService.getStats());
+});
+
 // Healthcheck
-app.get("/health", (req, res) => {
+app.get("/health", (_, res) => {
   res.json({ status: "ok" });
 });
 
 // Error handler (last)
 app.use(errorHandler);
 
-app.listen(env.port, () => {
+// Create HTTP server
+const server = createServer(app);
+
+// Create WebSocket server
+const wss = new WebSocketServer({ 
+  server,
+  path: "/ws"
+});
+
+// Handle WebSocket connections
+wss.on('connection', (ws, request) => {
+  handleWebSocketConnection(ws, request);
+});
+
+server.listen(env.port, () => {
   console.log(`Server running at http://localhost:${env.port}`);
+  console.log(`WebSocket server running at ws://localhost:${env.port}/ws`);
 });

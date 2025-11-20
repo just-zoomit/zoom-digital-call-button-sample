@@ -66,58 +66,7 @@
       </section>
     </main>
 
-    <script>
-      const requestId = "<%= requestId %>";
-
-      function setStepper(status, claimedByName) {
-        const reviewing = document.querySelector(".step-reviewing");
-        const received  = document.querySelector(".step-received");
-        const onway     = document.querySelector(".step-onway");
-
-        [reviewing, received, onway].forEach(step => {
-          step.classList.remove("is-active", "is-complete");
-        });
-
-        // Default state: just submitted
-        // NEW  -> Reviewing active
-        // CLAIMED -> Reviewing + Received complete, On the way active
-        // RESOLVED -> all complete
-        if (status === "NEW") {
-          reviewing.classList.add("is-active");
-        } else if (status === "CLAIMED") {
-          reviewing.classList.add("is-complete");
-          received.classList.add("is-complete");
-          onway.classList.add("is-active");
-
-          // optionally personalize the "On the way" copy
-          if (claimedByName) {
-            const desc = onway.querySelector(".status-step-desc");
-            desc.textContent = `${claimedByName} is on the way to help you.`;
-          }
-        } else if (status === "RESOLVED") {
-          reviewing.classList.add("is-complete");
-          received.classList.add("is-complete");
-          onway.classList.add("is-complete");
-        } else {
-          // fallback
-          reviewing.classList.add("is-active");
-        }
-      }
-
-      async function pollStatus() {
-        try {
-          const res = await fetch(`/api/status/${requestId}`);
-          if (!res.ok) return;
-          const data = await res.json();
-
-          setStepper(data.status, data.claimedByDisplayName || null);
-        } catch (err) {
-          console.error("Error polling status", err);
-        }
-      }
-
-      pollStatus();
-      setInterval(pollStatus, 3000);
-    </script>
+    <!-- Load external JavaScript file -->
+    <script src="/js/call-status.js" data-request-id="<%= requestId %>"></script>
   </body>
 </html>

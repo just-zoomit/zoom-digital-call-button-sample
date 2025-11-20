@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /**)",
-      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/services/**)"
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/services/**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/routes/**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /views/**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/db/**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /src/**)",
+      "Read(//Users/dontesmall/PRODUCTION/github/zoom-chatbot-digital-call-button-sample /public/**)"
     ],
     "deny": [],
     "ask": []

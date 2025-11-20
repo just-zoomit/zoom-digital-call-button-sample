@@ -1,6 +1,6 @@
 import express from "express";
 import { db } from "../db/mockDb.js";
-import { createHelpRequest, getHelpRequest, RequestStatus } from "../services/requestService.js";
+import { createHelpRequest, getHelpRequest } from "../services/requestService.js";
 import { ChatbotService } from "../services/chatbotService.js";
 
 const router = express.Router();
@@ -110,7 +110,7 @@ router.get("/api/status/:requestId", async (req, res, next) => {
     res.json({
       id: request.id,
       status: request.status,
-      claimedByDisplayName: request.claimedByName || null
+      claimedByDisplayName: request.claimedByName || request.onTheWayByName || null
     });
   } catch (err) {
     next(err);
