@@ -1,6 +1,6 @@
 # 🛒 Zoom Digital Call Button Demo
 
-A modern, real-time digital call button system using Zoom Team Chatbot, Node.js, Express, and WebSocket technology. Customers can request help in-store and see instant status updates as associates respond through Zoom Team Chat.
+A real-time digital call button system using Zoom Team Chatbot, Node.js, Express, and WebSocket technology. Customers can request help in-store and see instant status updates as associates respond through Zoom Team Chat.
 
 ## ✨ Features
 
