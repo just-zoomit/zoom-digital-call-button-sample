@@ -109,6 +109,52 @@
         color: #999;
         font-style: italic;
       }
+
+      .departments-section {
+        margin-bottom: 2rem;
+      }
+
+      .departments-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .departments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+
+      .department-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.25rem;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+        display: block;
+      }
+
+      .department-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #2b7de9;
+        transform: translateY(-2px);
+      }
+
+      .department-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: #2b7de9;
+      }
+
+      .department-card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.4;
+      }
     </style>
   </head>
   <body>
@@ -128,13 +174,29 @@
         </form>
       </div>
 
-      <div id="resultsContainer">
       <% if (!query) { %>
         <div class="empty-state">
           <h2>Find what you need</h2>
           <p>Search for products or departments to get started</p>
         </div>
-      <% } else { %>
+      <% } %>
+
+      <% if (!query && allDepartments && allDepartments.length > 0) { %>
+        <div class="departments-section">
+          <h2>Browse by Department</h2>
+          <div class="departments-grid">
+            <% allDepartments.forEach(function(dept) { %>
+              <a href="/departments/<%= dept.id %>" class="department-card">
+                <h3><%= dept.name %></h3>
+                <p><%= dept.description %></p>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+
+      <% if (query) { %>
+      <div id="resultsContainer">
         <% if (departments.length === 0 && products.length === 0) { %>
           <div class="no-results">
             No results found for "<%= query %>"
@@ -170,8 +232,8 @@
             </div>
           <% } %>
         <% } %>
-      <% } %>
       </div>
+      <% } %>
     </div>
 
     <script src="/search.js"></script>

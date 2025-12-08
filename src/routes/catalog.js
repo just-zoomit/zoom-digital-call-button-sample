@@ -13,10 +13,12 @@ router.get("/", (_, res) => {
 router.get("/search", async (req, res, next) => {
   try {
     const { q } = req.query;
+    const allDepartments = await db.listDepartments();
 
     if (!q) {
       return res.render("search", {
         query: "",
+        allDepartments,
         departments: [],
         products: []
       });
@@ -26,6 +28,7 @@ router.get("/search", async (req, res, next) => {
 
     res.render("search", {
       query: q,
+      allDepartments,
       departments: results.departments,
       products: results.products
     });
