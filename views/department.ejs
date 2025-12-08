@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= department.name %> | Department</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .department-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: #2b7de9;
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .department-header {
+        background: linear-gradient(135deg, #2b7de9 0%, #1e5bb8 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .department-header h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+      }
+
+      .department-header p {
+        margin: 0;
+        font-size: 1.1rem;
+        opacity: 0.95;
+      }
+
+      .products-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .product-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+        display: block;
+      }
+
+      .product-card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        border-color: #2b7de9;
+        transform: translateY(-3px);
+      }
+
+      .product-card h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1.2rem;
+        color: #2b7de9;
+      }
+
+      .product-card p {
+        margin: 0 0 1rem 0;
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .product-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #999;
+      }
+
+      .product-sku {
+        font-family: monospace;
+        background: #f5f5f5;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+      }
+
+      .no-products {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #999;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="department-container">
+      <a href="/search" class="back-link">← Back to Search</a>
+
+      <div class="department-header">
+        <h1><%= department.name %></h1>
+        <p><%= department.description %></p>
+      </div>
+
+      <div class="products-section">
+        <h2>Products in this Department</h2>
+
+        <% if (products.length === 0) { %>
+          <div class="no-products">
+            No products available in this department yet.
+          </div>
+        <% } else { %>
+          <div class="products-grid">
+            <% products.forEach(function(product) { %>
+              <a href="/products/<%= product.id %>" class="product-card">
+                <h3><%= product.name %></h3>
+                <p><%= product.description %></p>
+                <div class="product-meta">
+                  <span class="product-sku">SKU: <%= product.sku %></span>
+                  <span><%= product.aisle %></span>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

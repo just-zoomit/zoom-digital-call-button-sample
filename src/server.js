@@ -9,6 +9,7 @@ import { WebSocketServer } from "ws";
 import { env } from "./config/env.js";
 import callRouter from "./routes/call.js";
 import zoomRouter from "./routes/zoom.js";
+import catalogRouter from "./routes/catalog.js";
 import { rateLimit } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { handleWebSocketConnection } from "./middleware/websocketHandler.js";
@@ -38,6 +39,7 @@ app.use("/call-request", rateLimit);
 // Routes
 app.use("/", callRouter);
 app.use("/zoom", zoomRouter);
+app.use("/", catalogRouter);
 
 // WebSocket stats endpoint
 app.get("/ws-stats", (_, res) => {

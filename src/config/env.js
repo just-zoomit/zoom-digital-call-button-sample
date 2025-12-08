@@ -11,6 +11,7 @@ function required(name) {
 
 export const env = {
   port: process.env.PORT || 3000,
+  nodeEnv: process.env.NODE_ENV || "development",
   zoomClientID: required("ZOOM_CLIENT_ID"),
   zoomChannelId: required("ZOOM_CHANNEL_ID")
 };

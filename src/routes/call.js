@@ -9,6 +9,7 @@ const chatbot = new ChatbotService();
 /**
  * GET /call?storeId=store-123&itemId=item-apples
  * Renders the "digital call button" page.
+ * Supports both legacy ITEMS (item-xxx) and new PRODUCTS (prod-xxx)
  */
 router.get("/call", async (req, res, next) => {
   try {
@@ -19,7 +20,21 @@ router.get("/call", async (req, res, next) => {
     }
 
     const store = await db.findStoreById(storeId);
-    const item = await db.findItemById(storeId, itemId);
+
+    let item = await db.findItemById(storeId, itemId);
+
+    if (!item && itemId.startsWith("prod-")) {
+      const product = await db.findProductById(itemId);
+      if (product) {
+        item = {
+          id: product.id,
+          name: product.name,
+          sku: product.sku,
+          aisle: product.aisle
+        };
+      }
+    }
+
     if (!store || !item) {
       return res.status(404).send("Store or item not found");
     }
@@ -39,6 +54,7 @@ router.get("/call", async (req, res, next) => {
 /**
  * POST /call-request
  * Body: storeId, itemId, promptId?, customQuestion?
+ * Supports both legacy ITEMS (item-xxx) and new PRODUCTS (prod-xxx)
  */
 router.post("/call-request", express.urlencoded({ extended: true }), async (req, res, next) => {
   try {
@@ -49,7 +65,21 @@ router.post("/call-request", express.urlencoded({ extended: true }), async (req,
     }
 
     const store = await db.findStoreById(storeId);
-    const item = await db.findItemById(storeId, itemId);
+
+    let item = await db.findItemById(storeId, itemId);
+
+    if (!item && itemId.startsWith("prod-")) {
+      const product = await db.findProductById(itemId);
+      if (product) {
+        item = {
+          id: product.id,
+          name: product.name,
+          sku: product.sku,
+          aisle: product.aisle
+        };
+      }
+    }
+
     if (!store || !item) {
       return res.status(404).send("Store or item not found");
     }

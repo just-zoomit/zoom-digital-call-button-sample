@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Products & Departments</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .search-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      .search-box {
+        margin-bottom: 2rem;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        direction: ltr;
+        unicode-bidi: embed;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #2b7de9;
+      }
+
+      .results-section {
+        margin-bottom: 2rem;
+      }
+
+      .results-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #666;
+      }
+
+      .empty-state h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .empty-state p {
+        font-size: 1rem;
+      }
+
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+      }
+
+      .result-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 1.25rem;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+        display: block;
+      }
+
+      .result-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #2b7de9;
+        transform: translateY(-2px);
+      }
+
+      .result-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: #2b7de9;
+      }
+
+      .result-card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.4;
+      }
+
+      .result-card .badge {
+        display: inline-block;
+        background: #f0f0f0;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        color: #555;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 2rem;
+        color: #999;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <h1 style="text-align: center; margin-bottom: 1rem;">Product & Department Search</h1>
+
+      <div class="search-box">
+        <form id="searchForm">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search for products or departments... (Press Enter)"
+            value="<%= query %>"
+            autofocus
+          />
+        </form>
+      </div>
+
+      <div id="resultsContainer">
+      <% if (!query) { %>
+        <div class="empty-state">
+          <h2>Find what you need</h2>
+          <p>Search for products or departments to get started</p>
+        </div>
+      <% } else { %>
+        <% if (departments.length === 0 && products.length === 0) { %>
+          <div class="no-results">
+            No results found for "<%= query %>"
+          </div>
+        <% } else { %>
+          <% if (departments.length > 0) { %>
+            <div class="results-section">
+              <h2>Departments (<%= departments.length %>)</h2>
+              <div class="results-grid">
+                <% departments.forEach(function(dept) { %>
+                  <a href="/departments/<%= dept.id %>" class="result-card">
+                    <h3><%= dept.name %></h3>
+                    <p><%= dept.description %></p>
+                    <span class="badge">Department</span>
+                  </a>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (products.length > 0) { %>
+            <div class="results-section">
+              <h2>Products (<%= products.length %>)</h2>
+              <div class="results-grid">
+                <% products.forEach(function(product) { %>
+                  <a href="/products/<%= product.id %>" class="result-card">
+                    <h3><%= product.name %></h3>
+                    <p><%= product.description %></p>
+                    <span class="badge"><%= product.aisle %></span>
+                  </a>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+        <% } %>
+      <% } %>
+      </div>
+    </div>
+
+    <script src="/search.js"></script>
+  </body>
+</html>
